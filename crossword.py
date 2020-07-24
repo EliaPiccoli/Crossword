@@ -1,8 +1,8 @@
 import string
 
 def _get_words():
-	#return [line.strip() for line in open("words.txt")]
-    return ["emergente", "ciao", "ramo", "sole", "luce"]
+	return [line.strip() for line in open("words.txt")]
+    #return ["emergente", "ciao", "ramo", "sole", "luce"]
 
 def _print_crossword(field, size):
 	for i in range(size):
@@ -10,18 +10,21 @@ def _print_crossword(field, size):
 			print(field[i][j] if field[i][j] != "" else "-", end="")
 		print()
 
-def check_fit(field, row, col, pos, old_word, new_word, is_new_word_horizontal):
-    print(f"Checking if {new_word} fits in current crossword..")
-    if is_new_word_horizontal:
-        for k in range(len(new_word)):
-            if field[row][col+k-pos] not in ("",new_word[k]):
-                return False
-    else:
-        for k in range(len(new_word)):
-            if field[row+k-pos][col] not in ("",new_word[k]):
-                return False
-    return True
+def _check_fit(field, row, col, pos, old_word, new_word, is_new_word_horizontal):
+	print(f"Checking if {new_word} fits in current crossword..")
+	if is_new_word_horizontal:
+		for k in range(len(new_word)):
+			if field[row][col+k-pos] not in ("", new_word[k]):
+				return False
+	else:
+		for k in range(len(new_word)):
+			if field[row+k-pos][col] not in ("", new_word[k]):
+				return False
+	return True
 
+def _print_sets(used, remaining):
+	print("used {}".format(used))
+	print("remaining {}".format(remaining))
 
 #dictionary with all the words
 w = _get_words()
@@ -39,6 +42,25 @@ placements = {}
 for i in range(len(w[0])):
 	field[i][0] = w[0][i]
 placements[w[0]] = (0, 0, True)
+
+#initialize two sets that will be updated and represents the status of the words
+used = set(w[0:1])
+remaining = set(w[1:])
+_print_sets(used, remaining)
+
+while len(remaining) > 0:
+	for word in remaining:
+		for c in word:
+			for word_placed in used:
+				if c in word_placed:
+					#possible link
+					print(word, word_placed, c)
+	else:
+		print("Could not create a full crossword")
+		exit(1)
+
+# --------------------------------------------------------
+# --------------------------------------------------------
 
 #try to add all the words
 stats = {}
@@ -63,8 +85,8 @@ for i in range(1, len(w)): #new words
 							print("shift")
 							#exit(1)
 					else:
-						fit = check_fit(field, row, col, pos, w[i], w[j], placements[w[j]][2])
-					
+						fit = _check_fit(field, row, col, pos, w[j], w[i], placements[w[j]][2])
+
 					if fit:
 						for k in range(1, len(w[i])):
 							field[row][col+k-pos] = w[i][k]
