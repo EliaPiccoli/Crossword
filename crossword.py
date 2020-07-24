@@ -10,6 +10,19 @@ def _print_crossword(field, size):
 			print(field[i][j] if field[i][j] != "" else "-", end="")
 		print()
 
+def check_fit(field, row, col, pos, old_word, new_word, is_new_word_horizontal):
+    print(f"Checking if {new_word} fits in current crossword..")
+    if is_new_word_horizontal:
+        for k in range(len(new_word)):
+            if field[row][col+k-pos] not in ("",new_word[k]):
+                return False
+    else:
+        for k in range(len(new_word)):
+            if field[row+k-pos][col] not in ("",new_word[k]):
+                return False
+    return True
+
+
 #dictionary with all the words
 w = _get_words()
 w.sort(reverse=True, key=len)
@@ -50,7 +63,7 @@ for i in range(1, len(w)): #new words
 							print("shift")
 							#exit(1)
 					else:
-						fit = all(field[row][col+k-pos] == "" for k in range(len(w[i])) if k != pos)
+						fit = check_fit(field, row, col, pos, w[i], w[j], placements[w[j]][2])
 					
 					if fit:
 						for k in range(1, len(w[i])):
