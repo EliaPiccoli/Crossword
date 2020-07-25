@@ -1,5 +1,7 @@
-emergente
-ciao
-ramo
-sole
-luce
+informatica
+difficile
+strano
+forte
+debole
+luminoso
+azzurro

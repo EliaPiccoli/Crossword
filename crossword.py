@@ -58,6 +58,7 @@ for i in range(len(w[0])):
 placements[w[0]] = (0, 0, True)
 
 #initialize current crossword edges, useful for later shifting
+# TODO: add edge control
 edges["top"] = 0
 edges["bottom"] = len(w[0]) - 1
 edges["left"] = 0
@@ -71,12 +72,6 @@ _print_sets(used, remaining)
 inserted_new_word = True
 
 while len(remaining) > 0:
-	if not inserted_new_word:
-		print("Restart the script, crossword cannot be completed with current word structure")
-		exit(1)
-
-	#print current crossword
-	#_print_crossword(field, size)
 	print("words left: {}".format(len(remaining)))
 	inserted_new_word = False
 
@@ -159,6 +154,7 @@ while len(remaining) > 0:
 				break
 	else:
 		print("Could not create a full crossword")
+		print("These words could not be introduced: ", remaining)
 		exit(1)
 
 print("FINAL CROSSOWORD")
