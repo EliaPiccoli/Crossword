@@ -13,14 +13,10 @@ def _print_crossword(field, size, empty="-"):
 
 def _check_fit(field, row, col, pos, old_word, new_word, is_new_word_horizontal):
 	#print(f"Checking if {new_word} fits in current crossword..")
-	if is_new_word_horizontal:
-		for k in range(len(new_word)):
-			if field[row][col+k-pos] not in ("", new_word[k]):
-				return False
-	else:
-		for k in range(len(new_word)):
-			if field[row+k-pos][col] not in ("", new_word[k]):
-				return False
+	for k in range(len(new_word)):
+		x = field[row][col+k-pos] if is_new_word_horizontal else field[row+k-pos][col]
+		if x not in ("", new_word[k]):
+			return False
 	return True
 
 # TODO: check roll() -> warp error
@@ -116,16 +112,12 @@ while len(remaining) > 0:
 						col = word_placed.find(c)
 						pos = word.find(c)
 
-						print(row, col, pos)
-
 						#check if word fits in current crossword boundaries 
 						if row-pos < 0 or row+(len(word)-pos) > size:
 							print("We gotta shift brother")
 							field = _shift(field, pos-row, 0)
 							_update_placements(placements, pos-row, False)
 							row=pos
-
-						print(row, col, pos)
 
 						#check if fits in needed cells
 						fit = _check_fit(field, row, col, pos, word_placed, word, placements[word_placed][2])
@@ -134,8 +126,6 @@ while len(remaining) > 0:
 							for k in range(0, len(word)):
 								field[row+k-pos][col] = word[k]
 							placements[word] = (row-pos, col, True)
-
-							print(placements)
 
 							#add placed word to correct set and remove from remaining
 							used.add(word)
