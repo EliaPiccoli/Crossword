@@ -1,4 +1,5 @@
 import string
+import numpy as np #my love
 
 def _get_words():
 	return [line.strip() for line in open("words.txt")]
@@ -22,6 +23,11 @@ def _check_fit(field, row, col, pos, old_word, new_word, is_new_word_horizontal)
 				return False
 	return True
 
+def _shift(field, offset, is_horizontal):
+	#if offset negative then left shift, else right shift.
+	return np.roll(field, offset, is_horizontal)
+
+
 def _print_sets(used, remaining):
 	print("used {}".format(used))
 	print("remaining {}".format(remaining))
@@ -43,18 +49,93 @@ for i in range(len(w[0])):
 	field[i][0] = w[0][i]
 placements[w[0]] = (0, 0, True)
 
+#initialize current crossword edges, useful for later shifting
+top = 0
+bottom = len(w[0]) - 1
+left = 0
+right = 0
+
 #initialize two sets that will be updated and represents the status of the words
 used = set(w[0:1])
 remaining = set(w[1:])
 _print_sets(used, remaining)
 
+inserted_new_word = True
+
 while len(remaining) > 0:
+	if not inserted_new_word:
+		print("Restart the script, crossword cannot be completed with current word structure")
+		exit(1)
+
+	#print current crossword
+	_print_crossword(field, size)
+
+	inserted_new_word = False
+
 	for word in remaining:
 		for c in word:
 			for word_placed in used:
 				if c in word_placed:
 					#possible link
-					print(word, word_placed, c)
+					print(f"Found a possible link between {word} and {word_placed} due to common character '{c}'")
+					if placements[word_placed][2]: #vertical word
+						col = placements[word_placed][1]
+						row = word_placed.find(c)
+						pos = word.find(c)
+
+						#check if word fits in current crossword boundaries 
+						if col-pos < 0 or col+(len(word)-pos) > size:
+							print("We gotta shift brother")
+							field = _shift(field, col-pos, 1) #1 = horizontal shift, 0 = vertical shift
+
+						#check if fits in needed cells
+						fit = _check_fit(field, row, col, pos, word_placed, word, placements[word_placed][2])
+
+						if fit:
+							for k in range(0, len(word)):
+								field[row][col+k-pos] = word[k]
+							placements[word] = (row, col-pos, False)
+
+							#add placed word to correct set and remove from remaining
+							used.add(word)
+							remaining.remove(word)
+
+							#pretty printing cause we fenoch
+							print(f"Updated sets after inserting word {word}")
+							_print_sets(used,remaining)
+
+							inserted_new_word = True
+							break
+					else: #horizontal word
+						row = placements[word_placed][0]
+						col = word_placed.find(c)
+						pos = word.find(c)
+
+						#check if word fits in current crossword boundaries 
+						if row-pos < 0 or row+(len(word)-pos) > size:
+							print("We gotta shift brother")
+							field = _shift(field, row-pos, 0) #1 = horizontal shift, 0 = vertical shift
+
+						#check if fits in needed cells
+						fit = _check_fit(field, row, col, pos, word_placed, word, placements[word_placed][2])
+
+						if fit:
+							for k in range(0, len(word)):
+								field[row+k-pos][col] = word[k]
+							placements[word] = (row-pos, col, True)
+
+							#add placed word to correct set and remove from remaining
+							used.add(word)
+							remaining.remove(word)
+
+							#pretty printing cause we fenoch
+							print(f"Updated sets after inserting word {word}")
+							_print_sets(used,remaining)
+
+							inserted_new_word = True
+							break
+
+
 	else:
 		print("Could not create a full crossword")
 		exit(1)
