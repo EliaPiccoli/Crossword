@@ -65,8 +65,6 @@ used = set(w[0:1])
 remaining = set(w[1:])
 _print_sets(used, remaining)
 
-inserted_new_word = True
-
 while len(remaining) > 0:
 	print("words left: {}".format(len(remaining)))
 	inserted_new_word = False
@@ -78,8 +76,8 @@ while len(remaining) > 0:
 					#possible link
 					print(f"Found a possible link between {word} and {word_placed} due to common character '{c}'")
 					if placements[word_placed][2]: #vertical word
-						col = placements[word_placed][1]
 						row = word_placed.find(c)
+						col = placements[word_placed][1]
 						pos = word.find(c)
 
 						#check if word fits in current crossword boundaries 
