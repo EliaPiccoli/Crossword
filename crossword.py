@@ -12,9 +12,15 @@ def _print_crossword(field, size, empty="-"):
 		print()
 
 def _check_fit(field, row, col, pos, old_word, new_word, is_new_word_horizontal):
-	#print(f"Checking if {new_word} fits in current crossword..")
+	print(f"Checking if {new_word} fits in current crossword..")
+	print(is_new_word_horizontal)
 	for k in range(len(new_word)):
-		x = field[row][col+k-pos] if is_new_word_horizontal else field[row+k-pos][col]
+		if is_new_word_horizontal:
+			r,c = row, col+k-pos
+		else:
+			r,c = row+k-pos, col
+		x = field[r][c]
+		print(x if x != "" else "-", r, c)
 		if x not in ("", new_word[k]):
 			return False
 	return True
@@ -78,18 +84,23 @@ while len(remaining) > 0:
 	x = input()
 
 	for word in remaining:
-		for c in word:
-			#create a list of the placed words sorted by the value of stats -> first we check words with no link to others
-			words_placed = list(used)
-			words_placed.sort(key=lambda x:stats[x])
-			for word_placed in words_placed:
+		print(word)
+		#create a list of the placed words sorted by the value of stats -> first we check words with no link to others
+		words_placed = list(used)
+		words_placed.sort(key=lambda x:stats[x])
+		print(words_placed)
+		for word_placed in words_placed:
+			for c in word:
+				print(c, word, word_placed)
 				if c in word_placed:
 					#possible link
 					print(f"Found a possible link between {word} and {word_placed} due to common character '{c}'")
 					if placements[word_placed][2]: #vertical word
-						row = word_placed.find(c)
+						row = word_placed.find(c) + placements[word_placed][0]
 						col = placements[word_placed][1]
 						pos = word.find(c)
+
+						print("row {} col {} pos {}".format(row, col, pos))
 
 						#check if word fits in current crossword boundaries 
 						if col-pos < 0 or col+(len(word)-pos) > size:
@@ -119,8 +130,10 @@ while len(remaining) > 0:
 							break
 					else: #horizontal word
 						row = placements[word_placed][0]
-						col = word_placed.find(c)
+						col = word_placed.find(c) + placements[word_placed][1]
 						pos = word.find(c)
+
+						print("row {} col {} pos {}".format(row, col, pos))
 
 						#check if word fits in current crossword boundaries 
 						if row-pos < 0 or row+(len(word)-pos) > size:
@@ -161,6 +174,9 @@ while len(remaining) > 0:
 print("FINAL CROSSOWORD")
 _print_crossword(field, size, " ")
 
-# BUG
+# BUG - should be fix
 # 1. fit
 # 2. placement of some words is not correct (horizontal)
+
+# TODO
+# 1. shift field then check for word, if it doesnt fit it wont unshift the field
