@@ -8,7 +8,7 @@ def _get_words():
 def _print_crossword(field, size, empty="-"):
 	for i in range(size):
 		for j in range(size):
-			print(field[i][j] if field[i][j] != "" else empty, end="")
+			print(" {} ".format(field[i][j]) if field[i][j] != "" else " {} ".format(empty), end="")
 		print()
 
 def _check_fit(field, row, col, pos, old_word, new_word, is_new_word_horizontal):
@@ -47,6 +47,8 @@ field = [["" for _ in range(size)] for _ in range(size)]
 placements = {}
 # dictionary with edges index
 edges = {}
+# dictionary with info about the word
+stats = {word:0 for word in w}
 
 #insert first word top-left corner
 for i in range(len(w[0])):
@@ -69,9 +71,18 @@ while len(remaining) > 0:
 	print("words left: {}".format(len(remaining)))
 	inserted_new_word = False
 
+	#debug
+	_print_crossword(field, size)
+	print(placements)
+	print(stats)
+	x = input()
+
 	for word in remaining:
 		for c in word:
-			for word_placed in used:
+			#create a list of the placed words sorted by the value of stats -> first we check words with no link to others
+			words_placed = list(used)
+			words_placed.sort(key=lambda x:stats[x])
+			for word_placed in words_placed:
 				if c in word_placed:
 					#possible link
 					print(f"Found a possible link between {word} and {word_placed} due to common character '{c}'")
@@ -102,7 +113,8 @@ while len(remaining) > 0:
 							#pretty printing cause we fenoch
 							print(f"Updated sets after inserting word {word}")
 							_print_sets(used,remaining)
-
+							
+							stats[word_placed] = stats[word_placed] + 1 
 							inserted_new_word = True
 							break
 					else: #horizontal word
@@ -133,6 +145,7 @@ while len(remaining) > 0:
 							print(f"Updated sets after inserting word {word}")
 							_print_sets(used,remaining)
 
+							stats[word_placed] = stats[word_placed] + 1
 							inserted_new_word = True
 							break
 			# TODO: change this trash
@@ -147,3 +160,7 @@ while len(remaining) > 0:
 
 print("FINAL CROSSOWORD")
 _print_crossword(field, size, " ")
+
+# BUG
+# 1. fit
+# 2. placement of some words is not correct (horizontal)
