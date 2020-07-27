@@ -12,15 +12,15 @@ def _print_crossword(field, size, empty="-"):
 		print()
 
 def _check_fit(field, row, col, pos, old_word, new_word, is_new_word_horizontal):
-	print(f"Checking if {new_word} fits in current crossword..")
-	print(is_new_word_horizontal)
+	#print(f"Checking if {new_word} fits in current crossword..")
+	#print(is_new_word_horizontal)
 	for k in range(len(new_word)):
 		if is_new_word_horizontal:
 			r,c = row, col+k-pos
 		else:
 			r,c = row+k-pos, col
 		x = field[r][c]
-		print(x if x != "" else "-", r, c)
+		#print(x if x != "" else "-", r, c)
 		if x not in ("", new_word[k]):
 			return False
 	return True
@@ -39,6 +39,13 @@ def _print_sets(used, remaining):
 def _update_placements(placements, shift, is_horizontal):
 	for element, value in placements.items():
 		placements[element] = (value[0], value[1]+shift, value[2]) if is_horizontal else (value[0]+shift, value[1], value[2])
+
+def _debug(field, size, placements, stats):
+	#debug
+	_print_crossword(field, size)
+	print(placements)
+	print(stats)
+	x = input()
 
 #dictionary with all the words
 w = _get_words()
@@ -71,40 +78,34 @@ edges["right"] = 0
 #initialize two sets that will be updated and represents the status of the words
 used = set(w[0:1])
 remaining = set(w[1:])
-_print_sets(used, remaining)
+#_print_sets(used, remaining)
 
 while len(remaining) > 0:
-	print("words left: {}".format(len(remaining)))
+	#print("words left: {}".format(len(remaining)))
 	inserted_new_word = False
 
-	#debug
-	_print_crossword(field, size)
-	print(placements)
-	print(stats)
-	x = input()
-
 	for word in remaining:
-		print(word)
+		#print(word)
 		#create a list of the placed words sorted by the value of stats -> first we check words with no link to others
 		words_placed = list(used)
 		words_placed.sort(key=lambda x:stats[x])
-		print(words_placed)
+		#print(words_placed)
 		for word_placed in words_placed:
 			for c in word:
-				print(c, word, word_placed)
+				#print(c, word, word_placed)
 				if c in word_placed:
 					#possible link
-					print(f"Found a possible link between {word} and {word_placed} due to common character '{c}'")
+					#print(f"Found a possible link between {word} and {word_placed} due to common character '{c}'")
 					if placements[word_placed][2]: #vertical word
 						row = word_placed.find(c) + placements[word_placed][0]
 						col = placements[word_placed][1]
 						pos = word.find(c)
 
-						print("row {} col {} pos {}".format(row, col, pos))
+						#print("row {} col {} pos {}".format(row, col, pos))
 
 						#check if word fits in current crossword boundaries 
 						if col-pos < 0 or col+(len(word)-pos) > size:
-							print("We gotta shift brother")
+							#print("We gotta shift brother")
 							field = _shift(field, pos-col, 1)
 							_update_placements(placements, pos-col, True)
 							col = pos
@@ -122,8 +123,8 @@ while len(remaining) > 0:
 							remaining.remove(word)
 
 							#pretty printing cause we fenoch
-							print(f"Updated sets after inserting word {word}")
-							_print_sets(used,remaining)
+							#print(f"Updated sets after inserting word {word}")
+							#_print_sets(used,remaining)
 							
 							stats[word_placed] = stats[word_placed] + 1 
 							inserted_new_word = True
@@ -133,11 +134,11 @@ while len(remaining) > 0:
 						col = word_placed.find(c) + placements[word_placed][1]
 						pos = word.find(c)
 
-						print("row {} col {} pos {}".format(row, col, pos))
+						#print("row {} col {} pos {}".format(row, col, pos))
 
 						#check if word fits in current crossword boundaries 
 						if row-pos < 0 or row+(len(word)-pos) > size:
-							print("We gotta shift brother")
+							#print("We gotta shift brother")
 							field = _shift(field, pos-row, 0)
 							_update_placements(placements, pos-row, False)
 							row=pos
@@ -155,8 +156,8 @@ while len(remaining) > 0:
 							remaining.remove(word)
 
 							#pretty printing cause we fenoch
-							print(f"Updated sets after inserting word {word}")
-							_print_sets(used,remaining)
+							#print(f"Updated sets after inserting word {word}")
+							#_print_sets(used,remaining)
 
 							stats[word_placed] = stats[word_placed] + 1
 							inserted_new_word = True
@@ -174,9 +175,6 @@ while len(remaining) > 0:
 print("FINAL CROSSOWORD")
 _print_crossword(field, size, " ")
 
-# BUG - should be fix
-# 1. fit
-# 2. placement of some words is not correct (horizontal)
-
 # TODO
 # 1. shift field then check for word, if it doesnt fit it wont unshift the field
+# 2. numpy.roll() if the crossword extends too much vertically or horizontally warps -> bigger field/check (?)

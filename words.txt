@@ -5,3 +5,6 @@ forte
 debole
 luminoso
 azzurro
+fiori
+mare
+luce
