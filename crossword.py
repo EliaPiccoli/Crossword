@@ -1,5 +1,6 @@
 import string
 import numpy as np #my love
+import time
 
 def _get_words():
 	return [line.strip() for line in open("words.txt")]
@@ -46,6 +47,8 @@ def _debug(field, size, placements, stats):
 	print(placements)
 	print(stats)
 	x = input()
+
+start = time.time()
 
 #dictionary with all the words
 w = _get_words()
@@ -174,6 +177,8 @@ while len(remaining) > 0:
 
 print("FINAL CROSSOWORD")
 _print_crossword(field, size, " ")
+
+print("Execution time: {:.3f}".format(time.time() - start))
 
 # TODO
 # 1. shift field then check for word, if it doesnt fit it wont unshift the field
