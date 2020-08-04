@@ -1,6 +1,15 @@
-Python Crossword generator
-Write into words.txt the various words then run the scrip which will print one of the possible crosswords
+# Python Crossword generator
 
-Future work:
-build a site where you will have the visualization of different crosswords.
-You can also create the pdf of the chosen one.
+------------------------------------------------------------------------------------------------------------------------
+
+**Usage:**
+-Run [app.py][app]
+-Write words (one per row) in textarea
+-Submit
+-Enjoy!
+
+**Future work:**
+Allow visualization of multiple crossword possibilities with given words.
+Allow PDF creation of the chosen crossword.
+
+[app]:<>
