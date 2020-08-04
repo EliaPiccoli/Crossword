@@ -1,0 +1,24 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Result</title>
+    </head>
+    <body>
+        <div id="crossword_box" style="text-align: center; border-width: 2px; border-color:black; border-style: solid; background-color: rgb(253, 213, 161);">
+                <p>Crucicristo finale:</p>
+                <table style="margin-left: auto;margin-right: auto;border-collapse: collapse;table-layout: fixed;width: 30%;background-color: yellowgreen;">
+                {% for row in crossword %}
+                    <tr>
+                    {% for cell in row %}
+                        {% if cell != '' %}
+                            <td style="border: black solid 1px; border-collapse: collapse; background-color: white; text-align: center;">{{cell}}</td>
+                        {% else %}
+                            <td>{{cell}}</td>
+                        {% endif %}
+                    {% endfor %}
+                    </tr>
+                {% endfor %}
+                </table>
+        </div>
+    </body>
+</html>
