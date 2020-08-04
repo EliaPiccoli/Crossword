@@ -2,14 +2,15 @@
 
 ------------------------------------------------------------------------------------------------------------------------
 
-**Usage:**
--Run [app.py][app]
--Write words (one per row) in textarea
--Submit
--Enjoy!
+**Usage:** 
+- Run [app.py][app] 
+- Write words (one per row) in textarea 
+- Submit 
+- Enjoy!  
 
-**Future work:**
-Allow visualization of multiple crossword possibilities with given words.
-Allow PDF creation of the chosen crossword.
 
-[app]:<>
+**Future work:** 
+* Allow visualization of multiple crossword possibilities with given words. 
+* Allow PDF creation of the chosen crossword. 
+
+[app]:<https://github.com/EliaPiccoli/Crossword/blob/master/app.py>
