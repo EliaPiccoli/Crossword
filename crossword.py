@@ -4,7 +4,6 @@ import time
 
 def _get_words(text):
 	#return [line.strip() for line in open("words.txt")]
-	print("This is the text", text)
 	return [line.strip() for line in text.split("\n")]
     #return ["emergente", "ciao", "ramo", "sole", "luce"]
 
@@ -14,9 +13,18 @@ def _print_crossword(field, size, empty="-"):
 			print(" {} ".format(field[i][j]) if field[i][j] != "" else " {} ".format(empty), end="")
 		print()
 
-def _check_fit(field, row, col, pos, old_word, new_word, is_new_word_horizontal):
+def _check_fit(field, row, col, pos, old_word, new_word, is_new_word_horizontal, size):
 	#print(f"Checking if {new_word} fits in current crossword..")
 	#print(is_new_word_horizontal)
+
+	#check if we are writing 2 words consecutevely
+	if is_new_word_horizontal and col-pos> 0:
+		if field[row][col-pos-1] != '':
+			return False
+	elif (not is_new_word_horizontal) and row-pos>0:
+		if field[row-pos-1][col] != '':
+			return False
+
 	for k in range(len(new_word)):
 		if is_new_word_horizontal:
 			r,c = row, col+k-pos
@@ -24,7 +32,11 @@ def _check_fit(field, row, col, pos, old_word, new_word, is_new_word_horizontal)
 			r,c = row+k-pos, col
 		x = field[r][c]
 		#print(x if x != "" else "-", r, c)
-		if x not in ("", new_word[k]):
+		if x not in ('', new_word[k]):
+			return False
+
+		#enormous and horrible check for avoiding 2 vertical/horizontal words side by side
+		if x == '' and ((is_new_word_horizontal and ((r-1>0 and field[r-1][c]!='') or (r+1<size and field[r+1][c]!=''))) or ((not is_new_word_horizontal) and ((c-1>0 and field[r][c-1]!='') or (c+1<size and field[r][c+1]!='')))):
 			return False
 	return True
 
@@ -58,7 +70,7 @@ def create_crossword(text):
 	w.sort(reverse=True, key=len)
 	print(w)
 
-	size = 2*len(w[0])
+	size = 4*len(w[0])
 	field = [["" for _ in range(size)] for _ in range(size)]
 
 	# dictionary with the info of the words placement
@@ -117,7 +129,7 @@ def create_crossword(text):
 								col = pos
 
 							#check if fits in needed cells
-							fit = _check_fit(field, row, col, pos, word_placed, word, placements[word_placed][2])
+							fit = _check_fit(field, row, col, pos, word_placed, word, placements[word_placed][2], size)
 
 							if fit:
 								for k in range(0, len(word)):
@@ -150,7 +162,7 @@ def create_crossword(text):
 								row=pos
 
 							#check if fits in needed cells
-							fit = _check_fit(field, row, col, pos, word_placed, word, placements[word_placed][2])
+							fit = _check_fit(field, row, col, pos, word_placed, word, placements[word_placed][2], size)
 
 							if fit:
 								for k in range(0, len(word)):
@@ -178,8 +190,8 @@ def create_crossword(text):
 			print("These words could not be introduced: ", remaining)
 			exit(1)
 
-	print("FINAL CROSSOWORD")
-	_print_crossword(field, size, " ")
+	#print("FINAL CROSSOWORD")
+	#_print_crossword(field, size, " ")
 
 	print("Execution time: {:.3f}".format(time.time() - start))
 	return field
