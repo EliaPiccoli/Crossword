@@ -4,22 +4,26 @@
         <title>Result</title>
     </head>
     <body>
+        <div id="navbar" style="background-color: rgb(224, 239, 255);height:5%;">
+            <a href="">
+                <img src="https://icon-library.com/images/website-home-icon/website-home-icon-16.jpg" style="max-height: 100%;">
+            </a>
+        </div>
         <div id="crossword_box" style="text-align: center; border-width: 2px; border-color:black; border-style: solid; background-color: rgb(253, 213, 161);">
-                <p style="color:darkslategrey;">Crucicristi finale:</p>
 
                 <!--first choice-->
                 <table style="margin-left: auto;margin-right: auto;border-collapse: collapse;table-layout: fixed;width: 45%;background-color: yellowgreen;">
-                {% for row in crossword_1 %}
-                    <tr>
-                    {% for cell in row %}
-                        {% if cell != '' %}
-                            <td style="border: black solid 1px; border-collapse: collapse; background-color: white; text-align: center;">{{cell}}</td>
-                        {% else %}
-                            <td>{{cell}}</td>
-                        {% endif %}
+                    {% for row in crossword_1 %}
+                        <tr>
+                        {% for cell in row %}
+                            {% if cell != '' %}
+                                <td style="border: black solid 1px; border-collapse: collapse; background-color: white; text-align: center;">{{cell}}</td>
+                            {% else %}
+                                <td>{{cell}}</td>
+                            {% endif %}
+                        {% endfor %}
+                        </tr>
                     {% endfor %}
-                    </tr>
-                {% endfor %}
                 </table>
                 
                 <!--second choice-->
@@ -35,7 +39,9 @@
                         {% endfor %}
                         </tr>
                     {% endfor %}
-                    </table>
+                </table>
+
+
         </div>
     </body>
 </html>

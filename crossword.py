@@ -101,6 +101,12 @@ def create_crossword(text):
 	while len(remaining) > 0:
 		#print("words left: {}".format(len(remaining)))
 		inserted_new_word = False
+		
+		#recreate set to obtain different crosswords on different executions
+		#i know it looks like shit, but it works!
+		remaining=list(remaining)
+		np.random.shuffle(remaining)
+		remaining=set(remaining)
 
 		for word in remaining:
 			#print(word)
