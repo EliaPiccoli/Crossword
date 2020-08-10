@@ -2,10 +2,14 @@ import string
 import numpy as np #my love
 import time
 
+def _get_words_file():
+	return "".join(line for line in open("words.txt"))
+
 def _get_words(text):
-	#return [line.strip() for line in open("words.txt")]
 	return [line.strip() for line in text.split("\n")]
-    #return ["emergente", "ciao", "ramo", "sole", "luce"]
+
+def _print(field):
+	_print_crossword(field, len(field[0]), " ")
 
 def _print_crossword(field, size, empty="-"):
 	for i in range(size):
@@ -99,14 +103,17 @@ def create_crossword(text):
 	#_print_sets(used, remaining)
 
 	while len(remaining) > 0:
-		#print("words left: {}".format(len(remaining)))
+		print("words left: {}".format(len(remaining)))
+		_print_sets(used, remaining)
+
 		inserted_new_word = False
 		
+		# TODO - EP - see main not true we get the same crossword
 		#recreate set to obtain different crosswords on different executions
 		#i know it looks like shit, but it works!
-		remaining=list(remaining)
-		np.random.shuffle(remaining)
-		remaining=set(remaining)
+		#remaining=list(remaining)
+		#np.random.shuffle(remaining)
+		#remaining=set(remaining)
 
 		for word in remaining:
 			#print(word)
@@ -205,3 +212,10 @@ def create_crossword(text):
 # TODO
 # 1. shift field then check for word, if it doesnt fit it wont unshift the field
 # 2. numpy.roll() if the crossword extends too much vertically or horizontally warps -> bigger field/check (?)
+
+if __name__ == "__main__":
+	f1 = create_crossword(_get_words_file())
+	print("-----------------------------------------------------------")
+	f2 = create_crossword(_get_words_file())
+	_print(f1)
+	_print(f2)

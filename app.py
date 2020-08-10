@@ -1,5 +1,5 @@
 from flask import Flask, redirect, url_for, render_template, request
-from crossword import create_crossword
+from crossword import create_crossword, _print
 
 app = Flask(__name__)
 
@@ -9,6 +9,8 @@ def home():
         #TODO call script in crossword.py for crossword generation
         crossword_matrix_1 = create_crossword(request.form["words"])
         crossword_matrix_2 = create_crossword(request.form["words"])
+        _print(crossword_matrix_1)
+        _print(crossword_matrix_2)
         return render_template("crossword_page.html", crossword_1 = crossword_matrix_1, crossword_2 = crossword_matrix_2)
     else:
         return render_template("main_page.html")
