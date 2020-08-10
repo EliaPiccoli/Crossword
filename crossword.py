@@ -17,6 +17,7 @@ def _print_crossword(field, size, empty="-"):
 			print(" {} ".format(field[i][j]) if field[i][j] != "" else " {} ".format(empty), end="")
 		print()
 
+# BUG we accept same letter only if is the position of the match not others -> overlap
 def _check_fit(field, row, col, pos, old_word, new_word, is_new_word_horizontal, size):
 	#print(f"Checking if {new_word} fits in current crossword..")
 	#print(is_new_word_horizontal)
