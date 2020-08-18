@@ -75,7 +75,7 @@ def create_crossword(text):
 	w.sort(reverse=True, key=len)
 	print(w)
 
-	size = 4*len(w[0])
+	size = 3*len(w[0])
 	field = [["" for _ in range(size)] for _ in range(size)]
 
 	# dictionary with the info of the words placement
@@ -92,7 +92,7 @@ def create_crossword(text):
 	placements[w[0]] = (0, 0, True)
 
 	#initialize current crossword edges, useful for later shifting
-	# TODO: add edge control
+	# TODO: add edge control and ACTUALLY UPDATE THEM GODDAMMIT
 	edges["top"] = 0
 	edges["bottom"] = len(w[0]) - 1
 	edges["left"] = 0
