@@ -11,6 +11,16 @@ def _get_words(text):
 def _print(field):
 	_print_crossword(field, len(field[0]), " ")
 
+def _update_edges(field, size, edges):
+	for i in range(size):
+		for j in range(size):
+			if field[i][j] != '':
+				edges["top"] = edges["top"] if i >= edges["top"] else i
+				edges["bottom"] = edges["bottom"] if i <= edges["bottom"] else i
+				edges["right"] = edges["right"] if j >= edges["right"] else j
+				edges["left"] = edges["left"] if j <= edges["left"] else j
+	return edges
+
 def _print_crossword(field, size, empty="-"):
 	for i in range(size):
 		for j in range(size):
@@ -92,7 +102,7 @@ def create_crossword(text):
 	placements[w[0]] = (0, 0, True)
 
 	#initialize current crossword edges, useful for later shifting
-	# TODO: add edge control and ACTUALLY UPDATE THEM GODDAMMIT
+	# TODO: add edge control
 	edges["top"] = 0
 	edges["bottom"] = len(w[0]) - 1
 	edges["left"] = 0
@@ -196,6 +206,7 @@ def create_crossword(text):
 								break
 				# TODO: change this trash
 				if inserted_new_word:
+					edges = _update_edges(field, size, edges)
 					break
 			if inserted_new_word:
 					break
@@ -208,7 +219,7 @@ def create_crossword(text):
 	#_print_crossword(field, size, " ")
 
 	print("Execution time: {:.3f}".format(time.time() - start))
-	return field
+	return field, edges["bottom"]+1, edges["left"]+1
 
 # TODO
 # 1. shift field then check for word, if it doesnt fit it wont unshift the field

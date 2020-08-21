@@ -7,11 +7,11 @@ app = Flask(__name__)
 def home():
     if request.method == "POST":
         #TODO call script in crossword.py for crossword generation
-        crossword_matrix_1 = create_crossword(request.form["words"])
-        crossword_matrix_2 = create_crossword(request.form["words"])
+        crossword_matrix_1, bottom_border_1, right_border_1 = create_crossword(request.form["words"])
+        crossword_matrix_2, bottom_border_2, right_border_2 = create_crossword(request.form["words"])
         #_print(crossword_matrix_1)
         #_print(crossword_matrix_2)
-        return render_template("crossword_page.html", crossword_1 = crossword_matrix_1, crossword_2 = crossword_matrix_2)
+        return render_template("crossword_page.html", crossword_1 = crossword_matrix_1, crossword_2 = crossword_matrix_2, bottom_border_1 = bottom_border_1, right_border_1 = right_border_1, bottom_border_2 = bottom_border_2, right_border_2 = right_border_2)
     else:
         return render_template("main_page.html")
 

@@ -3,7 +3,7 @@
         <meta charset="utf-8"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script> <!--to make screenshots of a certain element (keeping CSS features)-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script><!--to convert screenshot to pdf-->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script><!--makes it easier to refer to html elements-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <title>Result</title>
     </head>
     <body>
@@ -15,32 +15,48 @@
         <div id="crossword_box" style="text-align: center; border-width: 2px; border-color:black; border-style: solid; background-color: rgb(253, 213, 161);">
 
                 <!--first choice-->
-                <table id="result1" style="margin-left: auto;margin-right: auto;border-collapse: collapse;table-layout: fixed;width: 45%;background-color: yellowgreen;">
+                <table id="result1" style="margin-left: auto;margin-right: auto;border-collapse: collapse;table-layout: fixed;width: 30%;background-color: yellowgreen;">
+                    {% set count_bottom = namespace(value=0) %}
                     {% for row in crossword_1 %}
-                        <tr>
-                        {% for cell in row %}
-                            {% if cell != '' %}
-                                <td style="border: black solid 1px; border-collapse: collapse; background-color: white; text-align: center;">{{cell}}</td>
-                            {% else %}
-                                <td>{{cell}}</td>
-                            {% endif %}
-                        {% endfor %}
-                        </tr>
+                        {% if count_bottom.value < bottom_border_1 %}
+                            <tr>
+                            {% set count_right = namespace(value=0) %}
+                            {% for cell in row %}
+                                {% if count_right.value < right_border_1 %}
+                                    {% if cell != '' %}
+                                        <td style="border: black solid 1px; border-collapse: collapse; background-color: white; text-align: center;">{{cell}}</td>
+                                    {% else %}
+                                        <td>{{cell}}</td>
+                                    {% endif %}
+                                    {% set count_right.value = count_right.value+1 %}
+                                {% endif %}
+                            {% endfor %}
+                            </tr>
+                            {% set count_bottom.value = count_bottom.value+1 %}
+                        {% endif %}
                     {% endfor %}
                 </table>
 
                 <!--second choice-->
-                <table style="margin-left: auto;margin-right: auto;border-collapse: collapse;table-layout: fixed;width: 45%;background-color:darkturquoise;">
+                <table style="margin-left: auto;margin-right: auto;border-collapse: collapse;table-layout: fixed;width: 30%;background-color:darkturquoise;">
+                    {% set count_bottom = namespace(value=0) %}
                     {% for row in crossword_2 %}
-                        <tr>
-                        {% for cell in row %}
-                                {% if cell != '' %}
-                                    <td style="border: black solid 1px; border-collapse: collapse; background-color: white; text-align: center;">{{cell}}</td>
-                                {% else %}
-                                    <td >{{cell}}</td>
+                        {% if count_bottom.value < bottom_border_2 %}
+                            <tr>
+                            {% set count_right = namespace(value=0) %}
+                            {% for cell in row %}
+                                {% if count_right.value < right_border_2 %}
+                                    {% if cell != '' %}
+                                        <td style="border: black solid 1px; border-collapse: collapse; background-color: white; text-align: center;">{{cell}}</td>
+                                    {% else %}
+                                        <td>{{cell}}</td>
+                                    {% endif %}
+                                    {% set count_right.value = count_right.value+1 %}
                                 {% endif %}
-                        {% endfor %}
-                        </tr>
+                            {% endfor %}
+                            </tr>
+                            {% set count_bottom.value = count_bottom.value+1 %}
+                        {% endif %}
                     {% endfor %}
                 </table>
                 <button onclick="toPDF()">PDF of Image Above</button>
@@ -52,13 +68,14 @@
                 doc.setTextColor(80, 77, 78);
                 doc.text(50, 50, 'Take ur crossword and leave, bitch'); 
                 html2canvas($("#result1"), {
-                    scale: 5, //not working, resulting img is blurry, quality: 4 is not working either
+                    scale: 5,
                     onrendered: function(canvas) {
-                    var imgData = canvas.toDataURL('image/png');
-                    doc.addImage(imgData, 'PNG', 50, 70, $('#result1').width() / 1.5, $('#result1').height() / 1.5, 'SLOW');
+                    var imgData = canvas.toDataURL('image/jpeg');
+                    
+                    doc.addImage(imgData, 'PNG', 50, 70, $('#result1').width(), $('#result1').height(), 'SLOW');
                     console.log(imgData);
                     $('#result1').append(canvas);
-                    doc.save('Result.pdf');
+                    doc.save('Spec_Sheet.pdf');
                     }
                 });
             }
