@@ -16,6 +16,7 @@
 
                 <!--first choice-->
                 <table id="result1" style="margin-left: auto;margin-right: auto;border-collapse: collapse;table-layout: fixed;width: 30%;background-color: yellowgreen;">
+                    <!-- TODO Change in a for loop using all four edges -->
                     {% set count_bottom = namespace(value=0) %}
                     {% for row in crossword_1 %}
                         {% if count_bottom.value < bottom_border_1 %}

@@ -50,6 +50,7 @@ def _check_fit(field, row, col, pos, old_word, new_word, is_new_word_horizontal,
 		if x not in ('', new_word[k]):
 			return False
 
+		# TODO rewrite and correct pls
 		#enormous and horrible check for avoiding 2 vertical/horizontal words side by side
 		if x == '' and ((is_new_word_horizontal and ((r-1>0 and field[r-1][c]!='') or (r+1<size and field[r+1][c]!=''))) or ((not is_new_word_horizontal) and ((c-1>0 and field[r][c-1]!='') or (c+1<size and field[r][c+1]!='')))):
 			return False
@@ -231,3 +232,10 @@ if __name__ == "__main__":
 	f2 = create_crossword(_get_words_file())
 	_print(f1)
 	_print(f2)
+
+# Project for numbers
+# 1. Add dictionary where keys are tuples (i, j) and the associated item is the number
+# 	 To create dictionary iterate over placements once the crossword is completed and assign an increasing value
+# 2. Change HTML using i/j to iterate over the cells between the edges values so we can easily have the keys of the number dictionary
+# 3. if (i,j) in dictionary add <sup> dictionary[(i,j)] </sup> to add the number in supertext before the letter
+# -> cells with number are bigger (?)
