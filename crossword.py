@@ -29,31 +29,54 @@ def _print_crossword(field, size, empty="-"):
 
 # BUG we accept same letter only if is the position of the match not others -> overlap
 def _check_fit(field, row, col, pos, old_word, new_word, is_new_word_horizontal, size):
-	#print(f"Checking if {new_word} fits in current crossword..")
-	#print(is_new_word_horizontal)
 
 	#check if we are writing 2 words consecutevely
-	if is_new_word_horizontal and col-pos> 0:
-		if field[row][col-pos-1] != '':
-			return False
-	elif (not is_new_word_horizontal) and row-pos>0:
-		if field[row-pos-1][col] != '':
-			return False
+	if is_new_word_horizontal:
+		if col-pos>0:
+			if field[row][col-pos-1] != '':
+				return False
+		if col-pos+len(new_word)<size:
+			if field[row][col-pos+len(new_word)] != '':
+				return False
+	elif (not is_new_word_horizontal):
+		if row-pos>0:
+			if field[row-pos-1][col] != '':
+				return False
+		if row-pos+len(new_word)<size:
+			if field[row-pos+len(new_word)][col] != '':
+				return False
 
+	#check if cells needed are free or fille with compatible chars
 	for k in range(len(new_word)):
 		if is_new_word_horizontal:
 			r,c = row, col+k-pos
 		else:
 			r,c = row+k-pos, col
 		x = field[r][c]
-		#print(x if x != "" else "-", r, c)
 		if x not in ('', new_word[k]):
 			return False
-
-		# TODO rewrite and correct pls
-		#enormous and horrible check for avoiding 2 vertical/horizontal words side by side
-		if x == '' and ((is_new_word_horizontal and ((r-1>0 and field[r-1][c]!='') or (r+1<size and field[r+1][c]!=''))) or ((not is_new_word_horizontal) and ((c-1>0 and field[r][c-1]!='') or (c+1<size and field[r][c+1]!='')))):
-			return False
+		
+		
+		#check if words are being written side by side 
+		if x == '': 
+			if is_new_word_horizontal: #check previous row and next row (if within matrix borders) 
+				if r-1 >= 0:
+					#print(f"HORIZONTAL: inserting {new_word} --- especially letter '{new_word[k]}' ---  field[r-1] = {field[r-1][c]}")
+					if field[r-1][c]!='':
+						return False
+				if r+1 < size:
+					#print(f"HORIZONTAL: inserting {new_word} --- especially letter '{new_word[k]}' ---  field[r+1] = {field[r+1][c]}")
+					if field[r+1][c]!='':
+						return False
+			else: #check previous column and next column (if within matrix borders) 
+				if c-1 >= 0:
+					#print(f"VERTICAL: inserting {new_word} --- especially letter '{new_word[k]}' ---  field[c-1] = {field[r][c-1]}")
+					if field[r][c-1]!='':
+						return False
+				if c+1 < size:
+					#print(f"VERTICAL: inserting {new_word} --- especially letter '{new_word[k]}' ---  field[c+1] = {field[r][c+1]}")
+					if field[r][c+1]!='':
+						return False
 	return True
 
 # TODO: check roll() -> warp error
@@ -122,10 +145,9 @@ def create_crossword(text):
 		
 		# TODO - EP - see main not true we get the same crossword
 		#recreate set to obtain different crosswords on different executions
-		#i know it looks like shit, but it works!
-		#remaining=list(remaining)
-		#np.random.shuffle(remaining)
-		#remaining=set(remaining)
+		remaining=list(remaining)
+		np.random.shuffle(remaining)
+		remaining=set(remaining)
 
 		for word in remaining:
 			#print(word)
@@ -214,7 +236,8 @@ def create_crossword(text):
 		else:
 			print("Could not create a full crossword")
 			print("These words could not be introduced: ", remaining)
-			exit(1)
+			field = -1
+			break
 
 	#print("FINAL CROSSOWORD")
 	#_print_crossword(field, size, " ")

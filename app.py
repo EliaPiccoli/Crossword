@@ -6,11 +6,13 @@ app = Flask(__name__)
 @app.route("/", methods=["POST", "GET"])
 def home():
     if request.method == "POST":
-        #TODO call script in crossword.py for crossword generation
-        crossword_matrix_1, bottom_border_1, right_border_1 = create_crossword(request.form["words"])
-        crossword_matrix_2, bottom_border_2, right_border_2 = create_crossword(request.form["words"])
-        #_print(crossword_matrix_1)
-        #_print(crossword_matrix_2)
+        while True:
+            crossword_matrix_1, bottom_border_1, right_border_1 = create_crossword(request.form["words"])
+            crossword_matrix_2, bottom_border_2, right_border_2 = create_crossword(request.form["words"])
+            if crossword_matrix_1 != -1 and crossword_matrix_2 != -1: #if is equal to -1 means crossword was not created succesfully
+                break
+            else:
+                print("Trying generating crossword again..")
         return render_template("crossword_page.html", crossword_1 = crossword_matrix_1, crossword_2 = crossword_matrix_2, bottom_border_1 = bottom_border_1, right_border_1 = right_border_1, bottom_border_2 = bottom_border_2, right_border_2 = right_border_2)
     else:
         return render_template("main_page.html")
