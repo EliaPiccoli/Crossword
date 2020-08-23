@@ -8,17 +8,25 @@ def _get_words_file():
 def _get_words(text):
 	return [line.strip() for line in text.split("\n")]
 
-def _print(field):
-	_print_crossword(field, len(field[0]), " ")
+def _print(field, empty = " "):
+	_print_crossword(field, len(field[0]), empty)
 
-def _update_edges(field, size, edges):
-	for i in range(size):
-		for j in range(size):
-			if field[i][j] != '':
-				edges["top"] = edges["top"] if i >= edges["top"] else i
-				edges["bottom"] = edges["bottom"] if i <= edges["bottom"] else i
-				edges["right"] = edges["right"] if j >= edges["right"] else j
-				edges["left"] = edges["left"] if j <= edges["left"] else j
+def _update_edges(field, size, edges, shift=False, axis=False, offset=0):
+	if shift:
+		if axis: # horizontal-shift
+			edges["right"] = edges["right"] + offset
+			edges["left"] = edges["left"] + offset
+		else: # vertical shift
+			edges["top"] = edges["top"] + offset
+			edges["bottom"] = edges["bottom"] + offset			
+	else:	
+		for i in range(size):
+			for j in range(size):
+				if field[i][j] != '':
+					edges["top"] = edges["top"] if i >= edges["top"] else i
+					edges["bottom"] = edges["bottom"] if i <= edges["bottom"] else i
+					edges["right"] = edges["right"] if j <= edges["right"] else j
+					edges["left"] = edges["left"] if j >= edges["left"] else j
 	return edges
 
 def _print_crossword(field, size, empty="-"):
@@ -139,7 +147,7 @@ def create_crossword(text):
 
 	while len(remaining) > 0:
 		print("words left: {}".format(len(remaining)))
-		_print_sets(used, remaining)
+		#_print_sets(used, remaining)
 
 		inserted_new_word = False
 		
@@ -171,8 +179,10 @@ def create_crossword(text):
 							#check if word fits in current crossword boundaries 
 							if col-pos < 0 or col+(len(word)-pos) > size:
 								#print("We gotta shift brother")
-								field = _shift(field, pos-col, 1)
-								_update_placements(placements, pos-col, True)
+								shift = pos-col
+								field = _shift(field, shift, 1)
+								_update_placements(placements, shift, True)
+								_update_edges(field, size, edges, True, True, shift)
 								col = pos
 
 							#check if fits in needed cells
@@ -204,8 +214,10 @@ def create_crossword(text):
 							#check if word fits in current crossword boundaries 
 							if row-pos < 0 or row+(len(word)-pos) > size:
 								#print("We gotta shift brother")
-								field = _shift(field, pos-row, 0)
-								_update_placements(placements, pos-row, False)
+								shift = pos-row
+								field = _shift(field, shift, 0)
+								_update_placements(placements, shift, False)
+								_update_edges(field, size, edges, True, False, shift)
 								row=pos
 
 							#check if fits in needed cells
@@ -242,19 +254,29 @@ def create_crossword(text):
 	#print("FINAL CROSSOWORD")
 	#_print_crossword(field, size, " ")
 
+	word_order, i = {}, 0
+	for word in used:
+		word_order[(placements[word][0], placements[word][1])] = i
+		i = i+1
+
+	print(edges)
 	print("Execution time: {:.3f}".format(time.time() - start))
-	return field, edges["bottom"]+1, edges["left"]+1
+	#return field, edges["bottom"]+1, edges["left"]+1
+	return field, edges, word_order
 
 # TODO
 # 1. shift field then check for word, if it doesnt fit it wont unshift the field
 # 2. numpy.roll() if the crossword extends too much vertically or horizontally warps -> bigger field/check (?)
 
 if __name__ == "__main__":
-	f1 = create_crossword(_get_words_file())
-	print("-----------------------------------------------------------")
-	f2 = create_crossword(_get_words_file())
-	_print(f1)
-	_print(f2)
+	f,e,o = create_crossword(_get_words_file())
+	_print(f, "-")
+	print(e, o)
+	#f1 = create_crossword(_get_words_file())
+	#print("-----------------------------------------------------------")
+	#f2 = create_crossword(_get_words_file())
+	#_print(f1)
+	#_print(f2)
 
 # Project for numbers
 # 1. Add dictionary where keys are tuples (i, j) and the associated item is the number
