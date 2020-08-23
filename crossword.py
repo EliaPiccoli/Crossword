@@ -256,10 +256,17 @@ def create_crossword(text):
 
 	word_order, i = {}, 0
 	for word in used:
-		word_order[(placements[word][0], placements[word][1])] = i
-		i = i+1
+		word_order[(placements[word][0], placements[word][1])], i = i, i+1
 
-	print(edges)
+	v = [x for x in used if placements[x][2]]
+	h = list(set(w)-set(v))
+	v.sort(key=lambda x : word_order[(placements[x][0], placements[x][1])])
+	h.sort(key=lambda x : word_order[(placements[x][0], placements[x][1])])
+	print("Vertical")
+	for word in v: print("{}. {}".format(word_order[(placements[word][0], placements[word][1])], word))
+	print("Horizontal")
+	for word in h: print("{}. {}".format(word_order[(placements[word][0], placements[word][1])], word))
+
 	print("Execution time: {:.3f}".format(time.time() - start))
 	#return field, edges["bottom"]+1, edges["left"]+1
 	return field, edges, word_order
@@ -270,17 +277,10 @@ def create_crossword(text):
 
 if __name__ == "__main__":
 	f,e,o = create_crossword(_get_words_file())
-	_print(f, "-")
+	_print(f)
 	print(e, o)
 	#f1 = create_crossword(_get_words_file())
 	#print("-----------------------------------------------------------")
 	#f2 = create_crossword(_get_words_file())
 	#_print(f1)
 	#_print(f2)
-
-# Project for numbers
-# 1. Add dictionary where keys are tuples (i, j) and the associated item is the number
-# 	 To create dictionary iterate over placements once the crossword is completed and assign an increasing value
-# 2. Change HTML using i/j to iterate over the cells between the edges values so we can easily have the keys of the number dictionary
-# 3. if (i,j) in dictionary add <sup> dictionary[(i,j)] </sup> to add the number in supertext before the letter
-# -> cells with number are bigger (?)
