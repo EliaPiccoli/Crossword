@@ -34,7 +34,7 @@
                 </table>
 
                 <!--second choice-->
-                <table id="result2" style="margin-left: auto;margin-right: auto;border-collapse: collapse;table-layout: fixed;width: 50%;background-color: turquoise;">
+                <table id="result2" style="margin-left: auto;margin-right: auto;border-collapse: collapse;table-layout: fixed;width: 50%;background-color: white;">
                     {% for i in range(edges["top"], edges["bottom"]+1) %}
                         <tr>
                         {% for j in range(edges["left"], edges["right"]+1) %}
@@ -55,7 +55,9 @@
         </div>
         <script language="javascript">
             $('#export').on('click', function() {
-                html2canvas($('#result2'), {dpi: 144, //dpi sembra una presa per il culo, stessa cosa per scale (parametro intero). width e height ti permettono di fissare la dimensione dell'immagine ma anche lì ti aspetta una brutta sorpresa
+                html2canvas($('#result2'), {
+                    dpi: 144, //dpi sembra una presa per il culo, stessa cosa per scale (parametro intero). width e height ti permettono di fissare la dimensione dell'immagine ma anche lì ti aspetta una brutta sorpresa
+                    scale: 2, 
                     onrendered: function(canvas) {                                      
 
                         var saveAs = function(uri, filename) {
