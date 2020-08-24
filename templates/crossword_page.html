@@ -2,7 +2,6 @@
     <head>
         <meta charset="utf-8"/>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script> <!--to make screenshots of a certain element (keeping CSS features)-->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.4/jspdf.min.js"></script><!--to convert screenshot to pdf-->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <title>Result</title>
     </head>
@@ -15,18 +14,18 @@
         <div id="crossword_box" style="text-align: center; border-width: 2px; border-color:black; border-style: solid; background-color: rgb(253, 213, 161);">
 
                 <!--first choice-->
-                <table id="result1" style="margin-left: auto;margin-right: auto;border-collapse: collapse;table-layout: fixed;width: 30%;background-color: yellowgreen;">
-                    {% for i in range(edges_1["top"], edges_1["bottom"]+1) %}
+                <table id="result1" style="margin-left: auto;margin-right: auto;border-collapse: collapse;table-layout: fixed;width: 50%;background-color: yellowgreen;">
+                    {% for i in range(edges["top"], edges["bottom"]+1) %}
                         <tr>
-                        {% for j in range(edges_1["left"], edges_1["right"]+1) %}
-                            {% if crossword_1[i][j] != '' %}
-                                {% if (i,j) in wordplacements_1 %}
-                                    <td style="border: black solid 1px; border-collapse: collapse; background-color: white; text-align: center;"><sup>{{wordplacements_1[(i,j)]}}</sup>{{crossword_1[i][j]}}</td>
+                        {% for j in range(edges["left"], edges["right"]+1) %}
+                            {% if crossword[i][j] != '' %}
+                                {% if (i,j) in wordplacements %}
+                                    <td style="border: black solid 1px; border-collapse: collapse; background-color: white; text-align: center;position:relative;"><span style="position:absolute;font-size:50%;top:0px;left:2px;">{{wordplacements[(i,j)]}}</span>{{crossword[i][j]}}</td>
                                 {% else %}    
-                                    <td style="border: black solid 1px; border-collapse: collapse; background-color: white; text-align: center;">{{crossword_1[i][j]}}</td>
+                                    <td style="border: black solid 1px; border-collapse: collapse; background-color: white; text-align: center;">{{crossword[i][j]}}</td>
                                 {% endif %}                        
                             {% else %}
-                                <td>{{crossword_1[i][j]}}</td>
+                                <td>{{crossword[i][j]}}</td>
                             {% endif %}
                         {% endfor %}
                         </tr>
@@ -34,39 +33,50 @@
                 </table>
 
                 <!--second choice-->
-                <table style="margin-left: auto;margin-right: auto;border-collapse: collapse;table-layout: fixed;width: 30%;background-color:darkturquoise;">
-                    {% for i in range(edges_2["top"], edges_2["bottom"]) %}
+                <table id="result2" style="margin-left: auto;margin-right: auto;border-collapse: collapse;table-layout: fixed;width: 50%;background-color: turquoise;">
+                    {% for i in range(edges["top"], edges["bottom"]+1) %}
                         <tr>
-                        {% for j in range(edges_2["left"], edges_2["right"]+1) %}
-                            {% if crossword_2[i][j] != '' %}
-                                <td style="border: black solid 1px; border-collapse: collapse; background-color: white; text-align: center;">{{crossword_2[i][j]}}</td>
+                        {% for j in range(edges["left"], edges["right"]+1) %}
+                            {% if crossword[i][j] != '' %}
+                                {% if (i,j) in wordplacements %}
+                                    <td style="border: black solid 1px; border-collapse: collapse; background-color: white; text-align: center;position:relative;"><span style="position:absolute;font-size:50%;top:0px;left:2px;">{{wordplacements[(i,j)]}}</span>&nbsp</td>
+                                {% else %}    
+                                    <td style="border: black solid 1px; border-collapse: collapse; background-color: white; text-align: center;">&nbsp</td>
+                                {% endif %}                        
                             {% else %}
-                                <td>{{crossword_2[i][j]}}</td>
+                                <td>{{crossword[i][j]}}</td>
                             {% endif %}
                         {% endfor %}
                         </tr>
                     {% endfor %}
                 </table>
-                <button onclick="toPDF()">PDF of Image Above</button>
+                <button id='export'>PNG</button>
         </div>
         <script language="javascript">
-            function toPDF(){
-                var doc = new jsPDF('p', 'pt','a4',true);
-                doc.setFontSize(16);
-                doc.setTextColor(80, 77, 78);
-                doc.text(50, 50, 'Take ur crossword and leave, bitch'); 
-                html2canvas($("#result1"), {
-                    scale: 5,
-                    onrendered: function(canvas) {
-                    var imgData = canvas.toDataURL('image/jpeg');
-                    
-                    doc.addImage(imgData, 'PNG', 50, 70, $('#result1').width(), $('#result1').height(), 'SLOW');
-                    console.log(imgData);
-                    $('#result1').append(canvas);
-                    doc.save('Spec_Sheet.pdf');
+            $('#export').on('click', function() {
+                html2canvas($('#result2'), {dpi: 144, //dpi sembra una presa per il culo, stessa cosa per scale (parametro intero). width e height ti permettono di fissare la dimensione dell'immagine ma anche lì ti aspetta una brutta sorpresa
+                    onrendered: function(canvas) {                                      
+
+                        var saveAs = function(uri, filename) {
+                            var link = document.createElement('a');
+                            if (typeof link.download === 'string') {
+                                document.body.appendChild(link);
+                                link.download = filename;
+                                link.href = uri;
+                                link.click();
+                                document.body.removeChild(link); // remove the link when done
+                            } else {
+                                location.replace(uri);
+                            }
+                        };
+
+                        var img = canvas.toDataURL("image/png"),
+                            uri = img.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+
+                        saveAs(uri, 'tableExport.png');
                     }
-                });
-            }
+                }); 
+            });
         </script>
     </body>
 </html>

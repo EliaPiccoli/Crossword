@@ -7,13 +7,12 @@ app = Flask(__name__)
 def home():
     if request.method == "POST":
         while True:
-            crossword_matrix_1, edges_1, word_placement_1 = create_crossword(request.form["words"])
-            crossword_matrix_2, edges_2, _ = create_crossword(request.form["words"])
-            if crossword_matrix_1 != -1 and crossword_matrix_2 != -1: #if is equal to -1 means crossword was not created succesfully
+            crossword_matrix, edges, word_placement = create_crossword(request.form["words"])
+            if crossword_matrix != -1: #if is equal to -1 means crossword was not created succesfully
                 break
             else:
                 print("Trying generating crossword again..")
-        return render_template("crossword_page.html", crossword_1 = crossword_matrix_1, crossword_2 = crossword_matrix_2, edges_1 = edges_1, edges_2 = edges_2, wordplacements_1 = word_placement_1)
+        return render_template("crossword_page.html", crossword = crossword_matrix, edges = edges, wordplacements = word_placement)
     else:
         return render_template("main_page.html")
 

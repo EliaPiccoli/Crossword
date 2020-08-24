@@ -117,7 +117,7 @@ def create_crossword(text):
 	w.sort(reverse=True, key=len)
 	print(w)
 
-	size = 3*len(w[0])
+	size = 10*len(w[0])
 	field = [["" for _ in range(size)] for _ in range(size)]
 
 	# dictionary with the info of the words placement
@@ -254,9 +254,12 @@ def create_crossword(text):
 	#print("FINAL CROSSOWORD")
 	#_print_crossword(field, size, " ")
 
-	word_order, i = {}, 0
+	word_order, i = {}, 1
 	for word in used:
-		word_order[(placements[word][0], placements[word][1])], i = i, i+1
+		if (placements[word][0], placements[word][1]) in word_order:
+			pass
+		else:
+			word_order[(placements[word][0], placements[word][1])], i = i, i+1
 
 	v = [x for x in used if placements[x][2]]
 	h = list(set(w)-set(v))
