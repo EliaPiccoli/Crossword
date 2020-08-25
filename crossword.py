@@ -8,8 +8,8 @@ def _get_words_file():
 def _get_words(text):
 	return [line.strip() for line in text.split("\n")]
 
-def _print(field, empty = " "):
-	_print_crossword(field, len(field[0]), empty)
+def _print(field, empty = " ", edges=None):
+	_print_crossword(field, len(field[0]), empty, edges)
 
 def _update_edges(field, size, edges, shift=False, axis=False, offset=0):
 	if shift:
@@ -29,11 +29,17 @@ def _update_edges(field, size, edges, shift=False, axis=False, offset=0):
 					edges["left"] = edges["left"] if j >= edges["left"] else j
 	return edges
 
-def _print_crossword(field, size, empty="-"):
-	for i in range(size):
-		for j in range(size):
-			print("{}".format(field[i][j]) if field[i][j] != "" else "{}".format(empty), end="")
-		print()
+def _print_crossword(field, size, empty="-", edges=None):
+	if edges:
+		for i in range(edges["top"], edges["bottom"]+1):
+			for j in range(edges["left"], edges["right"]+1):
+				print("{}".format(field[i][j]) if field[i][j] != "" else "{}".format(empty), end="")
+			print()				
+	else:
+		for i in range(size):
+			for j in range(size):
+				print("{}".format(field[i][j]) if field[i][j] != "" else "{}".format(empty), end="")
+			print()
 
 # BUG we accept same letter only if is the position of the match not others -> overlap
 def _check_fit(field, row, col, pos, old_word, new_word, is_new_word_horizontal, size):
