@@ -13,7 +13,7 @@ def _empty_rect(rect_x, rect_y, width=100, height=100):
     w = ' width="{}"'.format(width)
     h = ' height="{}"'.format(height)
     color = ' fill="white"'
-    border = ' stroke-width="2" stroke="black"'
+    border = ' stroke-width="{}" stroke="black"'.format(width/25)
 
     return tag[:5] + x + y + w + h + color + border + tag[5:]
 
