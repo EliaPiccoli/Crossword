@@ -32,7 +32,7 @@ def _update_edges(field, size, edges, shift=False, axis=False, offset=0):
 def _print_crossword(field, size, empty="-"):
 	for i in range(size):
 		for j in range(size):
-			print(" {} ".format(field[i][j]) if field[i][j] != "" else " {} ".format(empty), end="")
+			print("{}".format(field[i][j]) if field[i][j] != "" else "{}".format(empty), end="")
 		print()
 
 # BUG we accept same letter only if is the position of the match not others -> overlap
