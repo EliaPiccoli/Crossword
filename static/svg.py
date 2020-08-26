@@ -1,7 +1,10 @@
 import crossword as c
+import os
 
-def _svg_header():
-    return '<svg xmlns="http://www.w3.org/2000/svg">'
+def _svg_header(edges, size):
+    w = ' width="{}"'.format((edges["right"]-edges["left"]+2)*size)
+    h = ' height="{}"'.format((edges["bottom"]-edges["top"]+2)*size)
+    return '<svg xmlns="http://www.w3.org/2000/svg"' + w + h + '>'
 
 def _svg_end():
     return "</svg>"
@@ -28,15 +31,19 @@ def _numbered_rect(rect_x, rect_y, text, width=100, height=100):
     return group[:3] + rect + text_tag[:5] + text_x + text_y + text_style + text_tag[5] + str(text) + text_tag[6:] + group[3:]
 
 def _create_crossword_svg(field, edges, word_placements, size, starting_x=10, starting_y=10):
-    with open("crossword.svg", "w") as file:
+    path_to_file=os.path.realpath(__file__)[:-6] + "crossword.svg"
+    print("che cazzo è",path_to_file)
+    with open(path_to_file, "w+") as file:
+        print("Creating crossword.svg..")
         new_line = "\n"
         current_x, current_y = starting_x, starting_y
-        file.write(_svg_header())
+        file.write(_svg_header(edges,size))
         file.write(new_line)
         for i in range(edges["top"], edges["bottom"]+1):
             for j in range(edges["left"], edges["right"]+1):
                 if field[i][j] != '':
                     if (i,j) in word_placements:
+                        print("hello")
                         file.write(_numbered_rect(current_x, current_y, word_placements[(i,j)], size, size))
                     else:
                         file.write(_empty_rect(current_x, current_y, size, size))

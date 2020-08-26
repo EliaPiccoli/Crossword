@@ -1,8 +1,6 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script> <!--to make screenshots of a certain element (keeping CSS features)-->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script type="text/javascript" src="{{ url_for('static', filename='test.js') }}"></script>
         <title>Result</title>
     </head>
@@ -51,35 +49,7 @@
                         </tr>
                     {% endfor %}
                 </table>
-                <button id='export'>PNG</button>
+                <a href="{{ url_for('static', filename=svg_path) }}" download="crossword_by_EP&NG">Download</a>
         </div>
-        <script language="javascript">
-            $('#export').on('click', function() {
-                html2canvas($('#result2'), {
-                    dpi: 144, //dpi sembra una presa per il culo, stessa cosa per scale (parametro intero). width e height ti permettono di fissare la dimensione dell'immagine ma anche lì ti aspetta una brutta sorpresa
-                    scale: 2, 
-                    onrendered: function(canvas) {                                      
-
-                        var saveAs = function(uri, filename) {
-                            var link = document.createElement('a');
-                            if (typeof link.download === 'string') {
-                                document.body.appendChild(link);
-                                link.download = filename;
-                                link.href = uri;
-                                link.click();
-                                document.body.removeChild(link); // remove the link when done
-                            } else {
-                                location.replace(uri);
-                            }
-                        };
-
-                        var img = canvas.toDataURL("image/png"),
-                            uri = img.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
-
-                        saveAs(uri, 'tableExport.png');
-                    }
-                }); 
-            });
-        </script>
     </body>
 </html>
