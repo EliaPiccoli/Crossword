@@ -9,7 +9,7 @@ def home():
     if request.method == "POST":
         while True:
             crossword_matrix, edges, word_placement = create_crossword(request.form["words"])
-            _create_crossword_svg(crossword_matrix, edges, word_placement, 25)
+            _create_crossword_svg(crossword_matrix, edges, word_placement, 50)
             if crossword_matrix != -1: #if is equal to -1 means crossword was not created succesfully
                 break
             else:
