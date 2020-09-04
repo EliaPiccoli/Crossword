@@ -32,7 +32,7 @@ def _numbered_rect(rect_x, rect_y, text, width=100, height=100):
 
 def _create_crossword_svg(field, edges, word_placements, size, starting_x=10, starting_y=10):
     path_to_file=os.path.realpath(__file__)[:-6] + "crossword.svg"
-    print("che cazzo è",path_to_file)
+    #("che cazzo è",path_to_file)
     with open(path_to_file, "w+") as file:
         print("Creating crossword.svg..")
         new_line = "\n"
@@ -43,7 +43,7 @@ def _create_crossword_svg(field, edges, word_placements, size, starting_x=10, st
             for j in range(edges["left"], edges["right"]+1):
                 if field[i][j] != '':
                     if (i,j) in word_placements:
-                        print("hello")
+                        #print("hello")
                         file.write(_numbered_rect(current_x, current_y, word_placements[(i,j)], size, size))
                     else:
                         file.write(_empty_rect(current_x, current_y, size, size))
