@@ -4,11 +4,20 @@ pattern = r"([A-Z]+)\n((?:.+\n)+)"
 
 def _parse_text(text):
     words_def = {}
+
+    text = """HELLO
+ciao
+come stai
+
+HELLOKEKW
+ciao
+come stai
+"""
+
     match = re.findall(pattern, text)
     for element in match:
-        words_def[element[0].replace(" ", "")] = element[1]
-    else:
-        return None
+        print(element[0], element[1])
+        words_def[element[0]] = element[1]
     
     return words_def
 
@@ -34,4 +43,4 @@ ccccccccccccccccc
 ccccccccccccccccc
 ccccccccccccccccc
 """
-    _parse_text(text)
+    print(_parse_text(text))

@@ -117,22 +117,21 @@ def _debug(field, size, placements, stats):
 
 def _create_definitions_file(words_with_def,placements,used,word_order):
 	v = [x for x in used if placements[x][2]]                               #create list of used vertical words
-	h = list(set(words_with_def.key())-set(v))                                                 #create list of used horizontal words
+	h = list(set(words_with_def.keys())-set(v))                                                 #create list of used horizontal words
 	v.sort(key=lambda x : word_order[(placements[x][0], placements[x][1])]) #ordering words on word_order values
 	h.sort(key=lambda x : word_order[(placements[x][0], placements[x][1])]) #same as above
 
-	f.open("definitions.txt", w)
-	f.write("-"*50,"VERTICAL","-"*50)
-	for word in v: f.write("{}.\n{}\n".format(word_order[(placements[word][0], placements[word][1])], words_with_def[word]))
-	f.write("-"*50,"HORIZONTAL","-"*50)
-	for word in h: f.write("{}.\n{}\n".format(word_order[(placements[word][0], placements[word][1])], words_with_def[word]))
-	f.close()
+	with open("definitions.txt", "w") as f:
+		f.write("-"*50+"VERTICAL"+"-"*50+"\n")
+		for word in v: f.write("{}.\n{}\n".format(word_order[(placements[word][0], placements[word][1])], words_with_def[word]))
+		f.write("-"*50+"HORIZONTAL"+"-"*50+"\n")
+		for word in h: f.write("{}.\n{}\n".format(word_order[(placements[word][0], placements[word][1])], words_with_def[word]))
 
 def create_crossword(words_with_def):
 	start = time.time()
 
 	#dictionary with all the words
-	w = words_with_def.keys()
+	w = [word for word in words_with_def.keys()]
 
 	w.sort(reverse=True, key=len)
 	print(w)
