@@ -1,3 +1,6 @@
-__pycache__/crossword.cpython-38
-__pycache__/svg.cpython-38
+__pycache__/crossword.cpython-38.pyc
+__pycache__/svg.cpython-38.pyc
 static/crossword.svg
+static/__pycache__/__init__.cpython-38.pyc
+static/__pycache__/parser.cpython-38-pyc
+static/static/svg.cpython-38.pyc
