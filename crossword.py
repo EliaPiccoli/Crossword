@@ -115,11 +115,25 @@ def _debug(field, size, placements, stats):
 	print(stats)
 	x = input()
 
-def create_crossword(text):
+def _create_definitions_file(words_with_def,placements,used,word_order):
+	v = [x for x in used if placements[x][2]]                               #create list of used vertical words
+	h = list(set(words_with_def.key())-set(v))                                                 #create list of used horizontal words
+	v.sort(key=lambda x : word_order[(placements[x][0], placements[x][1])]) #ordering words on word_order values
+	h.sort(key=lambda x : word_order[(placements[x][0], placements[x][1])]) #same as above
+
+	f.open("definitions.txt", w)
+	f.write("-"*50,"VERTICAL","-"*50)
+	for word in v: f.write("{}.\n{}\n".format(word_order[(placements[word][0], placements[word][1])], words_with_def[word]))
+	f.write("-"*50,"HORIZONTAL","-"*50)
+	for word in h: f.write("{}.\n{}\n".format(word_order[(placements[word][0], placements[word][1])], words_with_def[word]))
+	f.close()
+
+def create_crossword(words_with_def):
 	start = time.time()
 
 	#dictionary with all the words
-	w = _get_words(text)
+	w = words_with_def.keys()
+
 	w.sort(reverse=True, key=len)
 	print(w)
 
@@ -257,7 +271,7 @@ def create_crossword(text):
 			field = -1
 			break
 
-	#print("FINAL CROSSOWORD")
+	#print("FINAL CROSSWORD")
 	#_print_crossword(field, size, " ")
 
 	word_order, i = {}, 1
@@ -267,14 +281,7 @@ def create_crossword(text):
 		else:
 			word_order[(placements[word][0], placements[word][1])], i = i, i+1
 
-	v = [x for x in used if placements[x][2]]
-	h = list(set(w)-set(v))
-	v.sort(key=lambda x : word_order[(placements[x][0], placements[x][1])])
-	h.sort(key=lambda x : word_order[(placements[x][0], placements[x][1])])
-	print("Vertical")
-	for word in v: print("{}. {}".format(word_order[(placements[word][0], placements[word][1])], word))
-	print("Horizontal")
-	for word in h: print("{}. {}".format(word_order[(placements[word][0], placements[word][1])], word))
+	_create_definitions_file(words_with_def,placements,used,word_order)
 
 	print("Execution time: {:.3f}".format(time.time() - start))
 	#return field, edges["bottom"]+1, edges["left"]+1
