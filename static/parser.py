@@ -3,6 +3,11 @@ import re
 pattern = r"([A-Z]+)\n((?:.+\n)+)"
 
 def _parse_text(text):
+    # clean input from enter key
+    text = text.replace(chr(13), "")        
+    #for c in text:
+    #    print("{} : {}".format(ord(c), c))
+    #print(type(text), text)
     words_def = {}
     match = re.findall(pattern, text)
     for element in match:
