@@ -117,7 +117,7 @@ def _debug(field, size, placements, stats):
 
 def _create_definitions_file(words_with_def,placements,used,word_order):
 	v = [x for x in used if placements[x][2]]                               #create list of used vertical words
-	h = list(set(words_with_def.keys())-set(v))                                                 #create list of used horizontal words
+	h = list(set(words_with_def.keys())-set(v))                             #create list of used horizontal words
 	v.sort(key=lambda x : word_order[(placements[x][0], placements[x][1])]) #ordering words on word_order values
 	h.sort(key=lambda x : word_order[(placements[x][0], placements[x][1])]) #same as above
 

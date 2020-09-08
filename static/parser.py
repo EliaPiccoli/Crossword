@@ -4,16 +4,6 @@ pattern = r"([A-Z]+)\n((?:.+\n)+)"
 
 def _parse_text(text):
     words_def = {}
-
-    text = """HELLO
-ciao
-come stai
-
-HELLOKEKW
-ciao
-come stai
-"""
-
     match = re.findall(pattern, text)
     for element in match:
         print(element[0], element[1])
