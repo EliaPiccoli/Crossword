@@ -2,9 +2,12 @@ import re
 
 pattern = r"([A-Z]+)\n((?:.+\n)+)"
 
+# TODO special chars errors
 def _parse_text(text):
     # clean input from enter key
-    text = text.replace(chr(13), "")        
+    text = text.replace(chr(13), "")       
+    if text[-1] != "\n":
+        text += "\n"
     #for c in text:
     #    print("{} : {}".format(ord(c), c))
     #print(type(text), text)
