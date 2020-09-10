@@ -10,15 +10,6 @@ app = Flask(__name__)
 def home():
     if request.method == "GET":
         return render_template("main_page.html")
-    else:
-        while True:
-            crossword_matrix, edges, word_placement = create_crossword(_parse_text(request.form["words"]))
-            _create_crossword_svg(crossword_matrix, edges, word_placement, 50)
-            if crossword_matrix != -1: #if is equal to -1 means crossword was not created succesfully
-                break
-            else:
-                print("Trying generating crossword again..")
-        return render_template("crossword_page.html", crossword = crossword_matrix, edges = edges, wordplacements = word_placement, svg_path = 'crossword.svg')
 
 @app.route("/upload-image", methods=["GET", "POST"])
 def upload_image():
@@ -27,13 +18,24 @@ def upload_image():
             image = request.files["image"]
             while True:
                 crossword_matrix, edges, word_placement = create_crossword(_parse_text(image.read()))
-                _create_crossword_svg(crossword_matrix, edges, word_placement, 50)
                 if crossword_matrix != -1: #if is equal to -1 means crossword was not created succesfully
+                    _create_crossword_svg(crossword_matrix, edges, word_placement, 50)
                     break
                 else:
-                    print("Trying generating crossword again..")
+                    render_template("error.html")
             return render_template("crossword_page.html", crossword = crossword_matrix, edges = edges, wordplacements = word_placement, svg_path = 'crossword.svg')
 
+@app.route("/upload-text", methods=["GET", "POST"])
+def upload_text():
+    if request.method == "POST":
+        while True:
+            crossword_matrix, edges, word_placement = create_crossword(_parse_text(request.form["words"]))
+            if crossword_matrix != -1: #if is equal to -1 means crossword was not created succesfully
+                _create_crossword_svg(crossword_matrix, edges, word_placement, 50)
+                break
+            else:
+                render_template("error.html")
+        return render_template("crossword_page.html", crossword = crossword_matrix, edges = edges, wordplacements = word_placement, svg_path = 'crossword.svg')
 
 if __name__ == "__main__":
     app.run(debug=True)

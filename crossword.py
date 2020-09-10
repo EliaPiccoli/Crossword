@@ -146,6 +146,8 @@ def create_crossword(words_with_def):
 	edges = {}
 	# dictionary with info about the word
 	stats = {word:0 for word in w}
+	# dictionary for word order
+	word_order = {}
 
 	#insert first word top-left corner
 	for i in range(len(w[0])):
@@ -272,15 +274,15 @@ def create_crossword(words_with_def):
 
 	#print("FINAL CROSSWORD")
 	#_print_crossword(field, size, " ")
+	if field != -1:
+		i = 1
+		for word in used:
+			if (placements[word][0], placements[word][1]) in word_order:
+				pass
+			else:
+				word_order[(placements[word][0], placements[word][1])], i = i, i+1
 
-	word_order, i = {}, 1
-	for word in used:
-		if (placements[word][0], placements[word][1]) in word_order:
-			pass
-		else:
-			word_order[(placements[word][0], placements[word][1])], i = i, i+1
-
-	_create_definitions_file(words_with_def,placements,used,word_order)
+		_create_definitions_file(words_with_def,placements,used,word_order)
 
 	print("Execution time: {:.3f}".format(time.time() - start))
 	#return field, edges["bottom"]+1, edges["left"]+1
