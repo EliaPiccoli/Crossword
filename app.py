@@ -6,7 +6,7 @@ from static.parser import _parse_text
 
 app = Flask(__name__)
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/", methods=["GET"])
 def home():
     if request.method == "GET":
         return render_template("main_page.html")
