@@ -25,8 +25,8 @@ def _numbered_rect(rect_x, rect_y, text, width=100, height=100):
     rect = _empty_rect(rect_x, rect_y, width, height)
     text_tag = "<text></text>"
     text_x = ' x="{}"'.format(rect_x + width*0.05)
-    text_y = ' y="{}"'.format(rect_y + width*0.2)
-    text_style = ' font-family="Times New Roman" fill="black" font-size="{}"'.format(width*0.2)
+    text_y = ' y="{}"'.format(rect_y + width*0.4)
+    text_style = ' font-family="Times New Roman" fill="black" font-size="{}"'.format(width*0.4)
 
     return group[:3] + rect + text_tag[:5] + text_x + text_y + text_style + text_tag[5] + str(text) + text_tag[6:] + group[3:]
 

@@ -5,7 +5,11 @@ pattern = r"([A-Z]+)\n((?:.+\n)+)"
 # TODO special chars errors
 def _parse_text(text):
     # clean input from enter key
-    text = text.replace(chr(13), "")       
+    if type(text) is bytes:
+        text = str(text)[2:-1]
+        text = text.replace("\\r","\r")
+        text = text.replace("\\n","\n")
+    text = text.replace(chr(13), "")
     if text[-1] != "\n":
         text += "\n"
     #for c in text:

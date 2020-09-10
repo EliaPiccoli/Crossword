@@ -2,3 +2,4 @@ __pycache__/*
 static/crossword.svg
 static/__pycache__/*
 definitions.txt
+scg_vari/*

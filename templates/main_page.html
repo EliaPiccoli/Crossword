@@ -5,11 +5,26 @@
     </head>
     <body>
         <div id="submit_box" >
-            <form action="#" method="post" style="text-align: center; border-width: 2px; border-color:greenyellow; border-style: solid; background-color: violet;">
+            <form action="#" method="post" style="text-align: center; border-width: 2px; border-color:rgb(0, 0, 0); border-style: solid; background-color: #8ae6ffd9;">
                 <p>Inserisci le parole per il Cruciverba:</p>
                 <em style="font-size: smaller;">Per una corretta formattazione inserire una parola per riga..</em><br><br>
                 <textarea id="words" name="words" rows="4" cols="50"></textarea>
-                <p><input type="submit" value="submit"/></p>
+                <form action="/upload-text" method="POST">
+                    <button type="submit">Submit text</button>
+                </form>
+                <form action="/upload-image" method="POST" enctype="multipart/form-data">
+
+                    <div class="form-group">
+                      <label>Select image</label>
+                      <div class="custom-file">
+                        <input type="file" name="image" id="image">
+                        <label for="image">Select image...</label>
+                      </div>
+                    </div>
+            
+                    <button type="submit">Upload</button>
+            
+                  </form>
             </form>
         </div>
     </body>
