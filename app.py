@@ -33,7 +33,7 @@ def upload_image():
 def upload_text():
     if request.method == "POST":
         while True:
-            words_with_def, placements, used, crossword_matrix, edges, word_placement = create_crossword(_parse_text(request.form["words"]))
+            words_with_def, placements, used, crossword_matrix, edges, word_placement = create_crossword(_parse_text(re.sub(r"\r", "", request.form["words"])))
             if crossword_matrix != -1: #if is equal to -1 means crossword was not created succesfully
                 _create_crossword_svg(crossword_matrix, edges, word_placement, 50)
                 break
