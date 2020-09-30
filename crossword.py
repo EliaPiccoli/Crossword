@@ -1,6 +1,7 @@
 import string
 import numpy as np #my love
 import time
+import os
 
 def _get_words_file():
 	return "".join(line for line in open("words.txt"))
@@ -121,7 +122,11 @@ def _create_definitions_file(words_with_def,placements,used,word_order):
 	v.sort(key=lambda x : word_order[(placements[x][0], placements[x][1])]) #ordering words on word_order values
 	h.sort(key=lambda x : word_order[(placements[x][0], placements[x][1])]) #same as above
 
-	with open("definitions.txt", "w") as f:
+	path_to_file = os.path.realpath(__file__)[:-12] + "static\definitions.txt" #on whichever machine the path will end with Crossword\crossword.py, cut final part to save file where needed
+
+	print("PATH TO FILE: ", path_to_file)
+
+	with open(path_to_file, "w") as f:
 		f.write("-"*50+"VERTICAL"+"-"*50+"\n")
 		for word in v: f.write("{}.\n{}\n".format(word_order[(placements[word][0], placements[word][1])], words_with_def[word]))
 		f.write("-"*50+"HORIZONTAL"+"-"*50+"\n")
@@ -282,11 +287,11 @@ def create_crossword(words_with_def):
 			else:
 				word_order[(placements[word][0], placements[word][1])], i = i, i+1
 
-		_create_definitions_file(words_with_def,placements,used,word_order)
+		#_create_definitions_file(words_with_def,placements,used,word_order)
 
 	print("Execution time: {:.3f}".format(time.time() - start))
 	#return field, edges["bottom"]+1, edges["left"]+1
-	return field, edges, word_order
+	return words_with_def, placements, used, field, edges, word_order
 
 # TODO
 # 1. shift field then check for word, if it doesnt fit it wont unshift the field
