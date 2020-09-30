@@ -2,6 +2,7 @@ from flask import Flask, redirect, url_for, render_template, request
 from werkzeug.utils import secure_filename
 from crossword import create_crossword, _print
 from static.svg import _create_crossword_svg
+from create_zip import _create_zip
 from static.parser import _parse_text
 
 from io import TextIOWrapper
@@ -20,19 +21,19 @@ def upload_image():
             image = TextIOWrapper(request.files["image"], encoding="utf-8")
             print(image, type(image))
             while True:
-                crossword_matrix, edges, word_placement = create_crossword(_parse_text(image.read()))
+                words_with_def, placements, used, crossword_matrix, edges, word_placement = create_crossword(_parse_text(image.read()))
                 if crossword_matrix != -1: #if is equal to -1 means crossword was not created succesfully
-                    _create_crossword_svg(crossword_matrix, edges, word_placement, 50)
+                    _create_zip(words_with_def,placements,used, crossword_matrix, edges, word_placement)
                     break
                 else:
                     render_template("error.html")
-            return render_template("crossword_page.html", crossword = crossword_matrix, edges = edges, wordplacements = word_placement, svg_path = 'crossword.svg')
+            return render_template("crossword_page.html", crossword = crossword_matrix, edges = edges, wordplacements = word_placement, svg_path = 'crossword.zip')
 
 @app.route("/upload-text", methods=["GET", "POST"])
 def upload_text():
     if request.method == "POST":
         while True:
-            crossword_matrix, edges, word_placement = create_crossword(_parse_text(request.form["words"]))
+            words_with_def, placements, used, crossword_matrix, edges, word_placement = create_crossword(_parse_text(request.form["words"]))
             if crossword_matrix != -1: #if is equal to -1 means crossword was not created succesfully
                 _create_crossword_svg(crossword_matrix, edges, word_placement, 50)
                 break

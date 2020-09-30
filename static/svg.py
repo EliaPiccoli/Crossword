@@ -31,8 +31,7 @@ def _numbered_rect(rect_x, rect_y, text, width=100, height=100):
     return group[:3] + rect + text_tag[:5] + text_x + text_y + text_style + text_tag[5] + str(text) + text_tag[6:] + group[3:]
 
 def _create_crossword_svg(field, edges, word_placements, size, starting_x=10, starting_y=10):
-    path_to_file=os.path.realpath(__file__)[:-6] + "crossword.svg"
-    #("che cazzo è",path_to_file)
+    path_to_file=os.path.realpath(__file__)[:-6] + "crossword.svg" #on whichever machine the path will end with Crossword\svg.py, cut final part to save file where needed
     with open(path_to_file, "w+") as file:
         print("Creating crossword.svg..")
         new_line = "\n"
