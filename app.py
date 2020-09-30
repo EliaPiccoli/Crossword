@@ -18,7 +18,6 @@ def upload_image():
     if request.method == "POST":
         if request.files:
             image = TextIOWrapper(request.files["image"], encoding="utf-8")
-            print(image, type(image))
             while True:
                 crossword_matrix, edges, word_placement = create_crossword(_parse_text(image.read()))
                 if crossword_matrix != -1: #if is equal to -1 means crossword was not created succesfully
