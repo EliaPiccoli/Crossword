@@ -3,6 +3,7 @@ import re
 pattern = r"([A-Z]+)\n((?:.+\n)+)"
 
 # TODO special chars errors
+# TODO è, ... <- brake everything LOL
 def _parse_text(text):
     # clean input from enter key
     if type(text) is bytes:
