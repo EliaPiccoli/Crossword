@@ -16,9 +16,9 @@ def _parse_text(text):
                 print(word, definition)
                 words_def[word] = definition
                 definition_rows = []
-        elif all(str.isupper(c) for c in line):
+        elif all(str.isupper(c) or c==" " for c in line):
             #print("WORD: ", line)
-            word = line
+            word = line.replace(" ", "")
         else:
             definition_rows.append(line)
 
