@@ -4,6 +4,7 @@ from crossword import create_crossword, _print
 from static.svg import _create_crossword_svg
 from static.parser import _parse_text
 
+import re
 from io import TextIOWrapper
 
 app = Flask(__name__)
@@ -31,7 +32,10 @@ def upload_image():
 def upload_text():
     if request.method == "POST":
         while True:
-            crossword_matrix, edges, word_placement = create_crossword(_parse_text(request.form["words"]))
+            print(type(request.form["words"]))
+            text = re.sub(r"\r", "", request.form["words"])
+            print(text)
+            crossword_matrix, edges, word_placement = create_crossword(_parse_text(text))
             if crossword_matrix != -1: #if is equal to -1 means crossword was not created succesfully
                 _create_crossword_svg(crossword_matrix, edges, word_placement, 50)
                 break

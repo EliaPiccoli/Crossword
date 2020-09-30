@@ -12,7 +12,7 @@ def _parse_text(text):
             if len(definition_rows) == 0:
                 continue
             else:
-                definition = "\n".join(definition_rows)
+                definition = "\n".join(definition_rows) + "\n"
                 print(word, definition)
                 words_def[word] = definition
                 definition_rows = []
