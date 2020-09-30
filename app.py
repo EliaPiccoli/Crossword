@@ -12,8 +12,9 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def home():
+    text_format = "PAROLA\ndef\ndef\n\nPAROLA2\ndef2\ndef2"
     if request.method == "GET":
-        return render_template("main_page.html")
+        return render_template("main_page.html", text=text_format)
 
 @app.route("/upload-image", methods=["GET", "POST"])
 def upload_image():
