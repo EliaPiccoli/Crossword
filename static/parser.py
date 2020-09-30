@@ -12,13 +12,13 @@ def _parse_text(text):
             if len(definition_rows) == 0:
                 continue
             else:
-                definition = "\n".join(definition_rows)
+                definition = "\n".join(definition_rows) + "\n"
                 print(word, definition)
                 words_def[word] = definition
                 definition_rows = []
-        elif all(str.isupper(c) for c in line):
+        elif all(str.isupper(c) or c==" " for c in line):
             #print("WORD: ", line)
-            word = line
+            word = line.replace(" ", "")
         else:
             definition_rows.append(line)
 

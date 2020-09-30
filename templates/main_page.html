@@ -12,8 +12,21 @@
         <div id="submit_box" >
             <form action="/upload-text" method="post" style="text-align: center; border-width: 2px; border-color:rgb(0, 0, 0); border-style: solid; background-color: #8ae6ffd9;">
                 <p>Inserisci le parole per il Cruciverba:</p>
-                <em style="font-size: smaller;">Per una corretta formattazione inserire una parola per riga..</em><br><br>
-                <textarea id="words" name="words" rows="4" cols="50"></textarea>
+                <em style="font-size: smaller;">
+                        <h3>
+                            Per una corretta formattazione:
+                        </h3>
+                        <p>
+                            - La parola va scritta in maiuscolo
+                        </p>
+                        <p>
+                            - Inserire successivamente la definizione della parola
+                        </p>
+                        <p>
+                            - Dividere le diverse parole-definizioni con un a capo
+                        </p>
+                </em>
+                <textarea id="words" name="words" rows="20" cols="100" placeholder="{{text}}"></textarea>
                 <br><br>
                 <button type="submit">Submit text</button>
             </form>                
