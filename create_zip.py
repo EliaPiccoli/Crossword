@@ -17,7 +17,13 @@ def _create_zip(words_with_def,placements,used, crossword_matrix, edges, word_pl
     path_to_file = root + '\crossword.zip' #on whichever machine the path will end with Crossword\create_zip.py, cut final part to save file where needed
     zipObj = ZipFile(path_to_file, 'w')
     # Add multiple files to the zip
-    zipObj.write(root + '\crossword.svg')
-    zipObj.write(root + '\definitions.txt')
+    zipObj.write(root + '\crossword.svg', 'crossword.svg')
+    zipObj.write(root + '\definitions.txt', 'definitions.txt')
     # close the Zip File
     zipObj.close()
+
+    #clean not needed files
+    if os.path.exists(root + '\crossword.svg'):
+        os.remove(root + '\crossword.svg')
+    if os.path.exists(root + '\definitions.txt'):
+        os.remove(root + '\definitions.txt')
