@@ -7,8 +7,8 @@ def _parse_text(text):
     word = definition = ""
     for line in wd:
         if line == '':
-            #print("DEF")
-            #print("\n".join(definition))
+            # print("DEF")
+            # print("\n".join(definition))
             if len(definition_rows) == 0:
                 continue
             else:
@@ -17,7 +17,7 @@ def _parse_text(text):
                 words_def[word] = definition
                 definition_rows = []
         elif all(str.isupper(c) or c==" " for c in line):
-            #print("WORD: ", line)
+            # print("WORD: ", line)
             word = line.replace(" ", "")
         else:
             definition_rows.append(line)
